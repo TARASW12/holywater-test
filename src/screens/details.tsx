@@ -2,7 +2,7 @@ import {View, Text, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from './index.tsx';
 import React, {useEffect, useRef, useState} from 'react';
-import backArrow from '../assets/backgrounds/backArrow.png';
+import backArrow from '../assets/images/backArrow.png';
 import remoteConfig from '@react-native-firebase/remote-config';
 import MyCarousel from '../components/snapCarousel.tsx';
 import {BookInfo} from '../components/bookInfo.tsx';
@@ -12,6 +12,7 @@ import {Book} from '../types/entity.ts';
 import FastImage from 'react-native-fast-image';
 import SnapCarousel from '../components/snapCarousel.tsx';
 import {fetchFromRemoteConfig, findLikedBooks} from '../utils';
+import BackButton from "../elements/goBack.tsx";
 
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 
@@ -57,7 +58,7 @@ export const Details = ({route}: DetailsScreenProps) => {
   return (
     <View style={styles.wrapper}>
       <SafeAreaView>
-        <FastImage style={styles.arrow} source={backArrow} />
+        <BackButton/>
       </SafeAreaView>
       <SnapCarousel
         setIndex={setIndex}

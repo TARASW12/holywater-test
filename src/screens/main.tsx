@@ -39,7 +39,6 @@ export const MainScreen = () => {
 
     fetchConfig();
   }, []);
-  console.log(data, 123);
   return (
     <View style={styles.wrapper}>
       <SafeAreaView style={styles.wrapper}>

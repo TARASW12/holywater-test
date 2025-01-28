@@ -41,7 +41,7 @@ export const LoadingScreen = ({navigation}: Props) => {
           <Text style={styles.subtitle}>Welcome to Book App</Text>
 
           <Progress.Bar
-            progress={0}
+            progress={progress}
             width={300}
             height={10}
             borderWidth={0}

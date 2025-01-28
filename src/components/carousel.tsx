@@ -31,7 +31,6 @@ export const CustomCarousel = ({data}: {data: SlideData}) => {
     },
     [],
   );
-  console.log({data}, 77);
   return (
     <View style={styles.carouselWrapper}>
       <Carousel
