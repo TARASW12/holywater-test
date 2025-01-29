@@ -20,16 +20,16 @@ export const CustomCarousel = ({data}: {data: SlideData}) => {
   const onProgressChange = useCallback(
     (offset: number, absoluteProgress: number) => {
       const progressDiff = Math.abs(absoluteProgress - prevProgress.current);
-      if (progressDiff > 0.3) {
+      if (progressDiff > 0.2) {
         prevProgress.current = absoluteProgress;
         const value =
-          Math.round(absoluteProgress) === data.length
+          Math.round(absoluteProgress) >= data.length
             ? 0
             : Math.round(absoluteProgress);
         setCurrentIndex(value);
       }
     },
-    [],
+    [data.length],
   );
   return (
     <View style={styles.carouselWrapper}>
@@ -47,6 +47,7 @@ export const CustomCarousel = ({data}: {data: SlideData}) => {
             onPress={() => navigation.navigate('Details', {id: item.book_id})}>
             <ImageBackground
               resizeMode={'cover'}
+              imageStyle={{borderRadius:8}}
               style={styles.imageWrapper}
               source={{uri: item.cover}}>
               <View style={styles.indicatorContainer}>
@@ -82,6 +83,7 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: width - 32,
     aspectRatio: 343 / 160,
+    borderRadius:12
   },
   indicatorContainer: {
     position: 'absolute',
