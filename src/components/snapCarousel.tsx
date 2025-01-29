@@ -8,8 +8,8 @@ const {width: screenWidth} = Dimensions.get('window');
 
 interface CarouselComponentProps {
   books: Book[];
-  carouselRef: React.RefObject<Carousel<Book>>;
   setIndex: (index: number) => void;
+  index: number;
 }
 
 const renderItem = ({item}: {item: Book}) => (
@@ -22,21 +22,31 @@ const renderItem = ({item}: {item: Book}) => (
 
 const SnapCarousel: React.FC<CarouselComponentProps> = ({
   books,
-  carouselRef,
   setIndex,
+  index,
 }) => {
   return (
     <View style={{marginBottom: 20}}>
       <Carousel
-        ref={carouselRef}
         data={books}
         renderItem={renderItem}
         sliderWidth={screenWidth}
         layout="default"
         loop={false}
+        getItemLayout={() => ({
+          length: screenWidth / 2,
+          offset: (screenWidth / 2) * index,
+          index,
+        })}
+        initialScrollIndex={index}
         loopClonesPerSide={books.length}
-        autoplay={false}
         initialNumToRender={books.length}
+        autoplay={false}
+        firstItem={index}
+        contentContainerCustomStyle={{
+          minWidth: screenWidth * books.length,
+        }}
+        keyExtractor={item => item.name}
         onSnapToItem={index => setIndex(index)}
         enableSnap={true}
         inactiveSlideScale={0.75}

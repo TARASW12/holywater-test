@@ -1,4 +1,4 @@
-package com.holywater
+package com.books.app
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

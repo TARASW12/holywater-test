@@ -1,18 +1,14 @@
 import {View, Text, StyleSheet, SafeAreaView, ScrollView} from 'react-native';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from './index.tsx';
-import React, {useEffect, useRef, useState} from 'react';
-import backArrow from '../assets/images/backArrow.png';
-import remoteConfig from '@react-native-firebase/remote-config';
-import MyCarousel from '../components/snapCarousel.tsx';
+import React, {useEffect, useState} from 'react';
 import {BookInfo} from '../components/bookInfo.tsx';
 import {LikeSection} from '../components/booksList.tsx';
 import ReadNowButton from '../elements/button.tsx';
 import {Book} from '../types/entity.ts';
-import FastImage from 'react-native-fast-image';
 import SnapCarousel from '../components/snapCarousel.tsx';
 import {fetchFromRemoteConfig, findLikedBooks} from '../utils';
-import BackButton from "../elements/goBack.tsx";
+import BackButton from '../elements/goBack.tsx';
 
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 
@@ -24,12 +20,7 @@ export const Details = ({route}: DetailsScreenProps) => {
   const [index, setIndex] = useState(0);
   const [carouselData, setCarouselData] = useState<Book[]>([]);
   const [proposedData, setProposedData] = useState<Book[]>([]);
-  const carouselRef = useRef(null);
-  const goToSlide = (index: number) => {
-    if (carouselRef.current) {
-      carouselRef.current.snapToItem(index);
-    }
-  };
+
   useEffect(() => {
     const fetchConfig = async () => {
       try {
@@ -41,13 +32,11 @@ export const Details = ({route}: DetailsScreenProps) => {
 
         setProposedData(findLikedBooks(books, likeSection));
         setCarouselData(detailsCarousel as Book[]);
-
         const selectedIndex = detailsCarousel.findIndex(
           (i: Book) => i.id === route.params.id,
         );
-        if (carouselRef.current) {
-          setTimeout(() => goToSlide(selectedIndex), 500);
-        }
+
+        setIndex(selectedIndex);
       } catch (error) {
         console.log(error);
       }
@@ -58,14 +47,12 @@ export const Details = ({route}: DetailsScreenProps) => {
   return (
     <View style={styles.wrapper}>
       <SafeAreaView>
-        <BackButton/>
+        <BackButton />
       </SafeAreaView>
-      <SnapCarousel
-        setIndex={setIndex}
-        carouselRef={carouselRef}
-        books={carouselData}
-      />
-      <ScrollView style={styles.infoWrapper}>
+      <SnapCarousel setIndex={setIndex} books={carouselData} index={index} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={styles.infoWrapper}>
         <BookInfo carouselData={carouselData} index={index} />
         <Text style={styles.likeText}>You will also like</Text>
         <LikeSection data={proposedData} />
