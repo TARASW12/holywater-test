@@ -1,32 +1,42 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 import background from '../assets/backgrounds/bg.png';
 import backgroundHearts from '../assets/backgrounds/bgHear.png';
-import * as Progress from 'react-native-progress';
 
 import type {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from './index.tsx';
-
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+  runOnJS,
+} from 'react-native-reanimated';
 type Props = NativeStackScreenProps<RootStackParamList, 'Loading'>;
 
 export const LoadingScreen = ({navigation}: Props) => {
-  const [progress, setProgress] = useState(0);
+  const progress = useSharedValue(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(prevProgress => {
-        if (prevProgress >= 1) {
-          return 0;
+    progress.value = withTiming(
+      1,
+      {
+        duration: 2000,
+        easing: Easing.linear,
+      },
+      finished => {
+        if (finished) {
+          runOnJS(navigation.navigate)({ name: 'Home', params:undefined });
         }
-        return prevProgress + 0.34;
-      });
-    }, 500);
-
-    setTimeout(() => navigation.navigate('Home'), 2000);
-
-    return () => clearInterval(interval);
+      },
+    );
   }, []);
 
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      width: `${progress.value * 100}%`,
+    };
+  });
   return (
     <ImageBackground
       resizeMode="cover"
@@ -40,18 +50,9 @@ export const LoadingScreen = ({navigation}: Props) => {
           <Text style={styles.title}>Book App</Text>
           <Text style={styles.subtitle}>Welcome to Book App</Text>
 
-          <Progress.Bar
-            progress={progress}
-            width={300}
-            height={10}
-            borderWidth={0}
-            borderRadius={6}
-            color="white"
-            unfilledColor="#FFFFFF33"
-            animationType="timing"
-            animationConfig={{duration: progress === 0 ? 100 : 400, toValue: 1}}
-            style={styles.progressBar}
-          />
+          <View style={styles.progressBarBackground}>
+            <Animated.View style={[styles.progressBarFill, animatedStyle]} />
+          </View>
         </View>
       </ImageBackground>
     </ImageBackground>
@@ -67,6 +68,21 @@ const styles = StyleSheet.create({
   backgroundHearts: {
     flex: 1,
   },
+
+  progressBarBackground: {
+    width: 300,
+    height: 10,
+    marginTop: 20,
+    backgroundColor: '#FFFFFF33',
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  progressBarFill: {
+    height: '100%',
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+
   contentContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -83,8 +99,5 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     color: '#FFFFFF',
-  },
-  progressBar: {
-    marginTop: 50,
   },
 });

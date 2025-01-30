@@ -23,7 +23,13 @@ const BackButton: React.FC<BackButtonProps> = ({style}) => {
 };
 
 const styles = StyleSheet.create({
-  arrow: {width: 26, marginTop:10, height: 26, marginLeft: 16, marginBottom: 8},
+  arrow: {
+    width: 26,
+    marginTop: 10,
+    height: 26,
+    marginLeft: 16,
+    marginBottom: 8,
+  },
 });
 
 export default BackButton;

@@ -47,7 +47,7 @@ export const CustomCarousel = ({data}: {data: SlideData}) => {
             onPress={() => navigation.navigate('Details', {id: item.book_id})}>
             <ImageBackground
               resizeMode={'cover'}
-              imageStyle={{borderRadius:8}}
+              imageStyle={{borderRadius: 8}}
               style={styles.imageWrapper}
               source={{uri: item.cover}}>
               <View style={styles.indicatorContainer}>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: width - 32,
     aspectRatio: 343 / 160,
-    borderRadius:12
+    borderRadius: 12,
   },
   indicatorContainer: {
     position: 'absolute',
